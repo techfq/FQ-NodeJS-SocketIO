@@ -1,5 +1,4 @@
 "use strict";
-const PORT = 8080;
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -38,5 +37,7 @@ io.on("connection", (socket) => {
 });
 
 // setInterval(sendTime, 5000);
+
+const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, () => console.log(`App listening on port ${PORT}`));
