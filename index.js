@@ -1,5 +1,6 @@
 "use strict";
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
@@ -10,14 +11,16 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, { cors: { origin: "*" } });
 
-app.use(express.static(__dirname));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 
 // view engine setup
-app.set("view engine", "ejs");
 
 var sysStart = new Date().toLocaleString("en-vi");
 
@@ -36,7 +39,7 @@ io.on("connection", (socket) => {
    io.emit;
 });
 
-// setInterval(sendTime, 5000);
+setInterval(sendTime, 5000);
 
 const PORT = process.env.PORT || 8080;
 
