@@ -30,8 +30,12 @@ app.get("/", async (req, res) => {
 });
 
 function sendTime() {
-   console.log("Send time: " + new Date().toJSON());
-   io.emit("time", { time: new Date().toJSON() });
+   const today = new Date();
+   const stringDate = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} ${today.getDate()}/${
+      today.getMonth() + 1
+   }/${today.getFullYear()}`;
+   console.log(stringDate);
+   io.emit("time", stringDate);
 }
 
 io.on("connection", (socket) => {
@@ -39,7 +43,7 @@ io.on("connection", (socket) => {
    io.emit;
 });
 
-setInterval(sendTime, 5000);
+setInterval(sendTime, 1000);
 
 const PORT = process.env.PORT || 8080;
 
