@@ -37,6 +37,6 @@ io.on("connection", (socket) => {
    io.emit;
 });
 
-setInterval(sendTime, 5000);
+// setInterval(sendTime, 5000);
 
 server.listen(PORT, () => console.log(`App listening on port ${PORT}`));
