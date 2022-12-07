@@ -9,7 +9,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: { origin: "*", methods: ["GET", "POST"], transports: ["websocket", "polling"], credentials: true } });
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
