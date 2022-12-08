@@ -20,8 +20,6 @@ app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 
-// view engine setup
-
 var sysStart = new Date().toLocaleString("en-vi");
 
 app.get("/", async (req, res) => {
@@ -29,27 +27,19 @@ app.get("/", async (req, res) => {
    res.render("index", { author: "tech.fqs", start: sysStart, now: nowStart });
 });
 
-function sendTime() {
-   const today = new Date();
-   const stringDate = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} ${today.getDate()}/${
-      today.getMonth() + 1
-   }/${today.getFullYear()}`;
-   // console.log(stringDate);
-   io.emit("event_name", stringDate);
-}
-
 io.on("connection", (socket) => {
    console.log("User connect: " + socket.id);
-
-   socket.on("now-value", function (data) {
-      console.log(data);
-   });
-   socket.on("event_name", function (data) {
-      console.log(data);
+   socket.on("my-room", (data) => {
+      console.log("Identifier: " + JSON.stringify(data));
+      socket.join(data.address);
    });
 });
 
-setInterval(sendTime, 2000);
+setInterval(() => {
+   io.sockets
+      .in("test-id")
+      .emit("displayNumber", { address: "benh-vien-quan-y-175", number: ("0000" + Math.floor(Math.random() * 9999)).slice(-4), ID: 1 });
+}, 2000);
 
 const PORT = process.env.PORT || 8080;
 
