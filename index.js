@@ -35,15 +35,23 @@ function sendTime() {
       today.getMonth() + 1
    }/${today.getFullYear()}`;
    console.log(stringDate);
-   io.emit("time", stringDate);
+   io.emit("event_name", stringDate);
 }
 
 io.on("connection", (socket) => {
    console.log("User connect: " + socket.id);
-   io.emit;
+   // io.emit;
+});
+io.on("led-change", function (data) {
+   console.log(data);
+   socket.broadcast.emit("led-change", data);
+});
+io.on("event_name", function (data) {
+   console.log(data);
+   socket.broadcast.emit("led-change", data);
 });
 
-setInterval(sendTime, 1000);
+setInterval(sendTime, 2000);
 
 const PORT = process.env.PORT || 8080;
 
