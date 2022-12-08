@@ -41,6 +41,34 @@ setInterval(() => {
       .emit("displayNumber", { address: "benh-vien-quan-y-175", number: ("0000" + Math.floor(Math.random() * 9999)).slice(-4), ID: 1 });
 }, 2000);
 
-const PORT = process.env.PORT || 8080;
+const firebase = require("./db");
+const firestore = firebase.firestore();
 
+const doc = firestore.collection("projects").doc("benh-vien-quan-y-175");
+const observer = doc.onSnapshot(
+   (docSnapshot) => {
+      console.log(`Received doc snapshot: ${JSON.stringify(docSnapshot.data().ESP_NUMBER)}`);
+      io.sockets.in("benh-vien-quan-y-175").emit("displayNumber", docSnapshot.data().ESP_NUMBER);
+   },
+   (err) => {
+      console.log(`Encountered error: ${err}`);
+   }
+);
+
+app.get("/:ID", async (req, res) => {
+   try {
+      const id = req.params.ID;
+      const project = firestore.collection("projects").doc(id);
+      const data = await project.get();
+      if (!data.exists) {
+         res.status(404).send("Project with the given ID not found");
+      } else {
+         res.send(data.data());
+      }
+   } catch (error) {
+      res.status(400).send(error.message);
+   }
+});
+
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => console.log(`App listening on port ${PORT}`));
