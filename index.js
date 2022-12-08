@@ -34,21 +34,19 @@ function sendTime() {
    const stringDate = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} ${today.getDate()}/${
       today.getMonth() + 1
    }/${today.getFullYear()}`;
-   console.log(stringDate);
+   // console.log(stringDate);
    io.emit("event_name", stringDate);
 }
 
 io.on("connection", (socket) => {
    console.log("User connect: " + socket.id);
-   // io.emit;
-});
-io.on("led-change", function (data) {
-   console.log(data);
-   socket.broadcast.emit("led-change", data);
-});
-io.on("event_name", function (data) {
-   console.log(data);
-   socket.broadcast.emit("led-change", data);
+
+   socket.on("now-value", function (data) {
+      console.log(data);
+   });
+   socket.on("event_name", function (data) {
+      console.log(data);
+   });
 });
 
 setInterval(sendTime, 2000);
