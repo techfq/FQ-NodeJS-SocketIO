@@ -55,19 +55,13 @@ const observer = doc.onSnapshot(
    }
 );
 
-app.get("/:ID", async (req, res) => {
-   try {
-      const id = req.params.ID;
-      const project = firestore.collection("projects").doc(id);
-      const data = await project.get();
-      if (!data.exists) {
-         res.status(404).send("Project with the given ID not found");
-      } else {
-         res.send(data.data());
-      }
-   } catch (error) {
-      res.status(400).send(error.message);
-   }
+app.get("/show", async (req, res) => {
+   console.log(req.body);
+   const address = req.body.addressID;
+   const display = req.body.displayID;
+   const number = req.body.showNumber;
+   io.sockets.in(address).emit("SN", { [display]: number });
+   res.send(req.body);
 });
 
 const PORT = process.env.PORT || 8080;
