@@ -55,7 +55,7 @@ const observer = doc.onSnapshot(
    }
 );
 
-app.get("/show", async (req, res) => {
+app.post("/show", async (req, res) => {
    console.log(req.body);
    const address = req.body.addressID;
    const display = req.body.displayID;
